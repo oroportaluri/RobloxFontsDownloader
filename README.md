@@ -32,6 +32,7 @@ pyinstaller --onefile --windowed --add-data "config.json;." --name "RobloxFontsD
 - **Direct downloads**: Falls back to ZIP downloads from font repositories
 - **Multi-source**: Automatic fallbacks when primary sources fail
 - **Smart installation**: Downloads to temp folder, copies to Windows fonts, registers with system
+
   ^ I didn't write any of this, it was the AI, so yeah it probably does this I have no clue
 
 ## Requirements
