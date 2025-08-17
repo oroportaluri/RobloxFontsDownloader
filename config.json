@@ -1,0 +1,263 @@
+{
+  "fonts": {
+    "AccanthisADFStd": {
+      "display_name": "Accanthis ADF Std",
+      "urls": [
+        "https://www.1001fonts.com/download/accanthis-adf-std.zip"
+      ]
+    },
+    "AmaticSC": {
+      "display_name": "Amatic SC",
+      "urls": [
+        "https://fonts.googleapis.com/css2?family=Amatic+SC:wght@400;700",
+        "https://fonts.bunny.net/css?family=Amatic+SC:wght@400;700"
+      ]
+    },
+    "Arimo": {
+      "display_name": "Arimo",
+      "urls": [
+        "https://fonts.googleapis.com/css2?family=Arimo:wght@400;500;600;700",
+        "https://fonts.bunny.net/css?family=Arimo:wght@400;500;600;700"
+      ]
+    },
+    "Balthazar": {
+      "display_name": "Balthazar",
+      "urls": [
+        "https://fonts.googleapis.com/css2?family=Balthazar",
+        "https://fonts.bunny.net/css?family=Balthazar"
+      ]
+    },
+    "Bangers": {
+      "display_name": "Bangers",
+      "urls": [
+        "https://fonts.googleapis.com/css2?family=Bangers",
+        "https://fonts.bunny.net/css?family=Bangers"
+      ]
+    },
+    "BuilderSans": {
+      "display_name": "Builder Sans",
+      "urls": [
+        "https://github.com/Shuiux/Roblox-Builder-Fonts/releases/download/Font/BuilderSans.zip"
+      ]
+    },
+    "ComicNeueAngular": {
+      "display_name": "Comic Neue Angular",
+      "urls": [
+        "https://www.1001fonts.com/download/comic-neue.zip"
+      ]
+    },
+    "Creepster": {
+      "display_name": "Creepster",
+      "urls": [
+        "https://fonts.googleapis.com/css2?family=Creepster",
+        "https://fonts.bunny.net/css?family=Creepster"
+      ]
+    },
+    "DenkOne": {
+      "display_name": "Denk One",
+      "urls": [
+        "https://fonts.googleapis.com/css2?family=Denk+One",
+        "https://fonts.bunny.net/css?family=Denk+One"
+      ]
+    },
+    "Fondamento": {
+      "display_name": "Fondamento",
+      "urls": [
+        "https://fonts.googleapis.com/css2?family=Fondamento",
+        "https://fonts.bunny.net/css?family=Fondamento"
+      ]
+    },
+    "FredokaOne": {
+      "display_name": "Fredoka One",
+      "urls": [
+        "https://fonts.googleapis.com/css2?family=Fredoka+One",
+        "https://fonts.bunny.net/css?family=Fredoka+One"
+      ]
+    },
+    "GrenzeGotisch": {
+      "display_name": "Grenze Gotisch",
+      "urls": [
+        "https://fonts.googleapis.com/css2?family=Grenze+Gotisch:wght@100;200;300;400;500;600;700;800;900",
+        "https://fonts.bunny.net/css?family=Grenze+Gotisch:wght@100;200;300;400;500;600;700;800;900"
+      ]
+    },
+    "Guru": {
+      "display_name": "Guru",
+      "urls": [
+        "https://www.1001fonts.com/download/the-guru-font.zip"
+      ]
+    },
+    "HighwayGothic": {
+      "display_name": "Highway Gothic",
+      "urls": [
+        "https://dl.dafont.com/dl/?f=highway_gothic"
+      ]
+    },
+    "Inconsolata": {
+      "display_name": "Inconsolata",
+      "urls": [
+        "https://fonts.googleapis.com/css2?family=Inconsolata:wght@200;300;400;500;600;700;800;900",
+        "https://fonts.bunny.net/css?family=Inconsolata:wght@200;300;400;500;600;700;800;900"
+      ]
+    },
+    "IndieFlower": {
+      "display_name": "Indie Flower",
+      "urls": [
+        "https://fonts.googleapis.com/css2?family=Indie+Flower",
+        "https://fonts.bunny.net/css?family=Indie+Flower"
+      ]
+    },
+    "JosefinSans": {
+      "display_name": "Josefin Sans",
+      "urls": [
+        "https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@100;200;300;400;500;600;700",
+        "https://fonts.bunny.net/css?family=Josefin+Sans:wght@100;200;300;400;500;600;700"
+      ]
+    },
+    "Jura": {
+      "display_name": "Jura",
+      "urls": [
+        "https://fonts.googleapis.com/css2?family=Jura:wght@300;400;500;600;700",
+        "https://fonts.bunny.net/css?family=Jura:wght@300;400;500;600;700"
+      ]
+    },
+    "Kalam": {
+      "display_name": "Kalam",
+      "urls": [
+        "https://fonts.googleapis.com/css2?family=Kalam:wght@300;400;700",
+        "https://fonts.bunny.net/css?family=Kalam:wght@300;400;700"
+      ]
+    },
+    "LuckiestGuy": {
+      "display_name": "Luckiest Guy",
+      "urls": [
+        "https://fonts.googleapis.com/css2?family=Luckiest+Guy",
+        "https://fonts.bunny.net/css?family=Luckiest+Guy"
+      ]
+    },
+    "Merriweather": {
+      "display_name": "Merriweather",
+      "urls": [
+        "https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700;900",
+        "https://fonts.bunny.net/css?family=Merriweather:wght@300;400;700;900"
+      ]
+    },
+    "Michroma": {
+      "display_name": "Michroma",
+      "urls": [
+        "https://fonts.googleapis.com/css2?family=Michroma",
+        "https://fonts.bunny.net/css?family=Michroma"
+      ]
+    },
+    "Montserrat": {
+      "display_name": "Montserrat",
+      "urls": [
+        "https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;900",
+        "https://fonts.bunny.net/css?family=Montserrat:wght@100;200;300;400;500;600;700;900"
+      ]
+    },
+    "Nunito": {
+      "display_name": "Nunito",
+      "urls": [
+        "https://fonts.googleapis.com/css2?family=Nunito:wght@200;300;400;600;700;800;900",
+        "https://fonts.bunny.net/css?family=Nunito:wght@200;300;400;600;700;800;900"
+      ]
+    },
+    "Oswald": {
+      "display_name": "Oswald",
+      "urls": [
+        "https://fonts.googleapis.com/css2?family=Oswald:wght@200;300;400;500;600;700",
+        "https://fonts.bunny.net/css?family=Oswald:wght@200;300;400;500;600;700"
+      ]
+    },
+    "PatrickHand": {
+      "display_name": "Patrick Hand",
+      "urls": [
+        "https://fonts.googleapis.com/css2?family=Patrick+Hand",
+        "https://fonts.bunny.net/css?family=Patrick+Hand"
+      ]
+    },
+    "PermanentMarker": {
+      "display_name": "Permanent Marker",
+      "urls": [
+        "https://fonts.googleapis.com/css2?family=Permanent+Marker",
+        "https://fonts.bunny.net/css?family=Permanent+Marker"
+      ]
+    },
+    "PressStart2P": {
+      "display_name": "Press Start 2P",
+      "urls": [
+        "https://fonts.googleapis.com/css2?family=Press+Start+2P",
+        "https://fonts.bunny.net/css?family=Press+Start+2P"
+      ]
+    },
+    "Roboto": {
+      "display_name": "Roboto",
+      "urls": [
+        "https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900",
+        "https://fonts.bunny.net/css?family=Roboto:wght@100;300;400;500;700;900"
+      ]
+    },
+    "RobotoCondensed": {
+      "display_name": "Roboto Condensed",
+      "urls": [
+        "https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300;400;700",
+        "https://fonts.bunny.net/css?family=Roboto+Condensed:wght@300;400;700"
+      ]
+    },
+    "RobotoMono": {
+      "display_name": "Roboto Mono",
+      "urls": [
+        "https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@100;200;300;400;500;600;700",
+        "https://fonts.bunny.net/css?family=Roboto+Mono:wght@100;200;300;400;500;600;700"
+      ]
+    },
+    "RomanAntique": {
+      "display_name": "Roman Antique",
+      "urls": [
+        "https://www.1001fonts.com/download/roman-antique.zip"
+      ]
+    },
+    "Sarpanch": {
+      "display_name": "Sarpanch",
+      "urls": [
+        "https://fonts.googleapis.com/css2?family=Sarpanch:wght@400;500;600;700;800;900",
+        "https://fonts.bunny.net/css?family=Sarpanch:wght@400;500;600;700;800;900"
+      ]
+    },
+    "SourceSansPro": {
+      "display_name": "Source Sans Pro",
+      "urls": [
+        "https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@200;300;400;600;700;900",
+        "https://fonts.bunny.net/css?family=Source+Sans+Pro:wght@200;300;400;600;700;900"
+      ]
+    },
+    "SpecialElite": {
+      "display_name": "Special Elite",
+      "urls": [
+        "https://fonts.googleapis.com/css2?family=Special+Elite",
+        "https://fonts.bunny.net/css?family=Special+Elite"
+      ]
+    },
+    "TitilliumWeb": {
+      "display_name": "Titillium Web",
+      "urls": [
+        "https://fonts.googleapis.com/css2?family=Titillium+Web:wght@200;300;400;600;700;900",
+        "https://fonts.bunny.net/css?family=Titillium+Web:wght@200;300;400;600;700;900"
+      ]
+    },
+    "Ubuntu": {
+      "display_name": "Ubuntu",
+      "urls": [
+        "https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;500;700",
+        "https://fonts.bunny.net/css?family=Ubuntu:wght@300;400;500;700"
+      ]
+    },
+    "Zekton": {
+      "display_name": "Zekton",
+      "urls": [
+        "https://www.1001fonts.com/download/zekton-free.zip"
+      ]
+    }
+  }
+}
