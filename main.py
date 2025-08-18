@@ -133,12 +133,11 @@ class FontDownloader:
         display_name = font_config['display_name']
         urls = font_config['urls']
 
-        print(f"\nAttempting to download: {display_name}")
+        print(f"\n{display_name}:")
         last_error = None
 
         # Try each URL source
         for url in urls:
-            print(f"  Trying URL: {url}")
             try:
                 if 'css' in url:
                     # CSS endpoint - extract actual font URLs
@@ -181,7 +180,8 @@ class FontDownloader:
 
                             # Install font (TTF/OTF only, skip WOFF)
                             if ext in ['.ttf', '.otf']:
-                                self.install_font(font_save_path)
+                                if self.install_font(font_save_path):
+                                    print(f"  Installed: {font_filename}")
                                 installed_any = True
 
                         except Exception as e:
@@ -193,16 +193,11 @@ class FontDownloader:
 
                 else:
                     # Direct download URL (ZIP or TTF/OTF file)
-                    print(f"    Downloading direct file...")
                     response = requests.get(url, timeout=30)
                     response.raise_for_status()
 
-                    print(f"    Response: {response.status_code}, Content-Type: {response.headers.get('content-type', 'unknown')}")
-                    print(f"    Content size: {len(response.content)} bytes")
-
                     # Check if it's a ZIP file
                     if response.content[:2] == b'PK' or 'zip' in response.headers.get('content-type', '').lower():
-                        print(f"    Detected ZIP file, extracting...")
                         # Create temporary file for the zip
                         with tempfile.NamedTemporaryFile(delete=False, suffix='.zip') as temp_file:
                             temp_file.write(response.content)
@@ -213,7 +208,6 @@ class FontDownloader:
                             with tempfile.TemporaryDirectory() as temp_dir:
                                 with zipfile.ZipFile(temp_zip_path, 'r') as zip_ref:
                                     zip_ref.extractall(temp_dir)
-                                    print(f"    Extracted ZIP to temp directory")
 
                                 # Find and install TTF files
                                 font_files = []
@@ -221,9 +215,6 @@ class FontDownloader:
                                     for file in files:
                                         if file.lower().endswith(('.ttf', '.otf')):
                                             font_files.append(os.path.join(root, file))
-                                            print(f"    Found font file: {file}")
-
-                                print(f"    Total font files found: {len(font_files)}")
 
                                 if font_files:
                                     for font_file in font_files:
@@ -231,13 +222,12 @@ class FontDownloader:
                                         font_filename = f"{display_name.replace(' ', '_')}_{os.path.basename(font_file)}"
                                         font_save_path = os.path.join(self.downloads_dir, font_filename)
                                         shutil.copy2(font_file, font_save_path)
-                                        print(f"    Saved: {font_filename}")
+                                        print(f"  Downloaded: {font_filename} ({os.path.getsize(font_save_path)} bytes)")
 
                                         # Install font
-                                        self.install_font(font_save_path)
+                                        if self.install_font(font_save_path):
+                                            print(f"  Installed: {font_filename}")
                                     return True
-                                else:
-                                    print(f"    No TTF/OTF files found in ZIP")
                         except Exception as zip_error:
                             print(f"    ZIP extraction failed: {zip_error}")
 
@@ -289,26 +279,84 @@ class FontDownloader:
                     shutil.copy2(font_path, dest_path)
 
                 # Register the font with Windows
-                self.register_font(dest_path)
+                return self.register_font(dest_path)
+            return False
 
         except Exception as e:
-            print(f"Error installing font {font_path}: {str(e)}")
+            print(f"  Error installing font: {str(e)}")
+            return False
 
     def register_font(self, font_path):
+        """
+        Improved font registration using Windows API best practices
+        """
         try:
-            # Use Windows API to register the font
+            import winreg
+
+            # Constants
+            FONTS_REG_PATH = r'SOFTWARE\Microsoft\Windows NT\CurrentVersion\Fonts'
+            HWND_BROADCAST = 0xFFFF
+            WM_FONTCHANGE = 0x001D
+
+            # Setup Windows API calls with proper types
             gdi32 = ctypes.windll.gdi32
+            user32 = ctypes.windll.user32
+
             gdi32.AddFontResourceW.argtypes = [wintypes.LPCWSTR]
             gdi32.AddFontResourceW.restype = ctypes.c_int
 
+            user32.SendMessageTimeoutW.argtypes = [
+                wintypes.HWND, wintypes.UINT, wintypes.WPARAM,
+                wintypes.LPARAM, wintypes.UINT, wintypes.UINT,
+                ctypes.POINTER(wintypes.DWORD)
+            ]
+
+            # Load the font resource
             result = gdi32.AddFontResourceW(font_path)
 
-            # Notify all windows that fonts have changed
-            user32 = ctypes.windll.user32
-            user32.SendMessageW(0xFFFF, 0x001D, 0, 0)  # WM_FONTCHANGE
+            if result > 0:
+                # Determine font type and create proper registry entry
+                font_filename = os.path.basename(font_path)
+                font_name_no_ext = os.path.splitext(font_filename)[0]
+                font_extension = os.path.splitext(font_filename)[1].lower()
+
+                # Determine font type for registry
+                if font_extension == '.ttf':
+                    font_type = '(TrueType)'
+                elif font_extension == '.otf':
+                    font_type = '(OpenType)'
+                else:
+                    font_type = '(TrueType)'  # Default fallback
+
+                registry_name = f"{font_name_no_ext} {font_type}"
+
+                # Add to Windows registry for permanent installation
+                try:
+                    with winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, FONTS_REG_PATH, 0, winreg.KEY_SET_VALUE) as key:
+                        winreg.SetValueEx(key, registry_name, 0, winreg.REG_SZ, font_filename)
+                except PermissionError:
+                    pass  # Silent fail on permission errors
+                except Exception:
+                    pass  # Silent fail on other registry errors
+
+                # Notify system with timeout to prevent hanging
+                try:
+                    timeout_result = wintypes.DWORD()
+                    user32.SendMessageTimeoutW(
+                        HWND_BROADCAST, WM_FONTCHANGE, 0, 0,
+                        0, 1000, ctypes.byref(timeout_result)  # 1 second timeout
+                    )
+                except Exception:
+                    # Fallback to simple SendMessage
+                    user32.SendMessageW(HWND_BROADCAST, WM_FONTCHANGE, 0, 0)
+
+                return True
+            else:
+                return False
 
         except Exception as e:
             print(f"Error registering font {font_path}: {str(e)}")
+            return False
 
     def download_fonts_thread(self):
         self.success_count = 0
@@ -338,16 +386,32 @@ class FontDownloader:
         total_fonts = len(self.fonts)
         failed_count = len(self.failed_fonts)
 
+        # Console output summary
+        print("\n" + "="*50)
+        print("INSTALLATION COMPLETE!")
+        print("="*50)
+        print(f"✅ Successfully installed: {self.success_count}/{total_fonts} fonts")
+
+        if self.failed_fonts:
+            print(f"❌ Failed: {len(self.failed_fonts)} fonts")
+
+        print(f"\nFiles saved to: {self.downloads_dir}")
+        print("\nFonts are now available in all applications!")
+        print("="*50)
+
+        # GUI message
         if failed_count == 0:
             message = (f"✅ Success! All {total_fonts} fonts have been downloaded and installed.\n\n"
-                      f"Font files saved to: {self.downloads_dir}")
+                      f"Font files saved to: {self.downloads_dir}\n\n"
+                      f"Check the console window for detailed installation info.")
             title = "Download Complete"
             messagebox.showinfo(title, message)
         else:
             message = (f"⚠️ Download completed with some issues:\n\n"
                       f"✅ Successfully installed: {self.success_count} fonts\n"
                       f"❌ Failed to install: {failed_count} fonts\n\n"
-                      f"Font files saved to: {self.downloads_dir}")
+                      f"Font files saved to: {self.downloads_dir}\n\n"
+                      f"Check the console window for detailed installation info.")
 
             if failed_count <= 5:  # Show failed fonts if not too many
                 message += f"\n\nFailed fonts:\n" + "\n".join(self.failed_fonts)
@@ -378,34 +442,82 @@ def request_admin_privileges():
     try:
         if sys.platform == "win32":
             import subprocess
-            # Re-launch the current script with admin privileges
-            subprocess.run([
-                'powershell', '-Command',
-                f'Start-Process python -ArgumentList "{os.path.abspath(__file__)}" -Verb RunAs'
-            ], check=True)
+            # Determine if we're running from an executable or script
+            if getattr(sys, 'frozen', False):
+                # Running from PyInstaller executable
+                executable_path = sys.executable
+                subprocess.run([
+                    'powershell', '-Command',
+                    f'Start-Process "{executable_path}" -Verb RunAs'
+                ], check=True)
+            else:
+                # Running from Python script
+                subprocess.run([
+                    'powershell', '-Command',
+                    f'Start-Process python -ArgumentList "{os.path.abspath(__file__)}" -Verb RunAs'
+                ], check=True)
             return True
-    except:
+    except Exception as e:
+        print(f"Failed to request admin privileges: {e}")
         return False
     return False
 
 if __name__ == "__main__":
-    # Check if running as admin on Windows
-    if sys.platform == "win32":
+    try:
+        # Check if running as admin on Windows
+        if sys.platform == "win32":
+            try:
+                is_admin = ctypes.windll.shell32.IsUserAnAdmin()
+            except:
+                is_admin = False
+
+            if not is_admin:
+                print("Administrator privileges required. Attempting to restart with elevated permissions...")
+                if request_admin_privileges():
+                    print("Restarting with administrator privileges...")
+                    sys.exit(0)
+                else:
+                    print("Failed to request administrator privileges.")
+                    print("Please manually run this application as administrator.")
+                    if not getattr(sys, 'frozen', False):  # Only wait for input if running as script
+                        input("Press Enter to exit...")
+                    sys.exit(1)
+
+        print("="*60)
+        print("ROBLOX FONTS DOWNLOADER")
+        print("="*60)
+        print("Starting application...")
+
+        app = FontDownloader()
+        app.run()
+
+        # Wait for user input before closing (only for executable)
+        if getattr(sys, 'frozen', False):
+            input("\nPress Enter to exit...")
+
+    except Exception as e:
+        # Handle any startup errors
+        error_msg = f"Application failed to start:\n\n{str(e)}\n\nCurrent directory: {os.getcwd()}"
+
         try:
-            is_admin = ctypes.windll.shell32.IsUserAnAdmin()
+            # Try to show error in GUI
+            import tkinter.messagebox as msgbox
+            error_root = tkinter.Tk()
+            error_root.withdraw()  # Hide the main window
+            msgbox.showerror("Startup Error", error_msg)
+            error_root.destroy()
         except:
-            is_admin = False
+            # If GUI fails, write to error log
+            try:
+                with open("error_log.txt", "w") as f:
+                    f.write(f"Startup Error: {str(e)}\n")
+                    f.write(f"Current directory: {os.getcwd()}\n")
+                    try:
+                        f.write(f"Files in directory: {os.listdir('.')}\n")
+                    except:
+                        f.write("Could not list directory contents\n")
+                print(f"Error logged to error_log.txt: {str(e)}")
+            except:
+                print(f"Critical error: {str(e)}")
 
-        if not is_admin:
-            print("Administrator privileges required. Attempting to restart with elevated permissions...")
-            if request_admin_privileges():
-                print("Restarting with administrator privileges...")
-                sys.exit(0)
-            else:
-                print("Failed to request administrator privileges.")
-                print("Please manually run this application as administrator.")
-                input("Press Enter to exit...")
-                sys.exit(1)
-
-    app = FontDownloader()
-    app.run()
+        sys.exit(1)
